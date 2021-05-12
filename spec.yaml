@@ -1,0 +1,509 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Delilah Resto
+  description: Documentation to use of API Delilah Resto
+  
+tags:
+  - name: Users
+    description: Users information
+  - name: Products
+    description: Products information
+  - name: Orders
+    description: Orders information
+paths:
+  /users:
+    post:
+      tags: 
+        - Users
+      summary: User add
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: neq_hbo
+                fullname:
+                  type: string
+                  example: Hector bedoya
+                email:
+                  type: string
+                  example: neqhbo@gmail.com
+                phone:
+                  type: integer
+                  example: 3167895677
+                address:
+                  type: string
+                  example: Av. caracas 155
+                pass:
+                  type: string
+                  example: 123holaneq
+              required:
+                - username
+                - fullname
+                - email
+                - phone
+                - address
+                - pass
+      responses:
+        "200":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: User created successfully
+                  user_id:
+                    type: integer
+                    example: 12345
+        "400":
+          description: All fields must be complete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: All fields must be complete
+        "401":
+          description: Error creating user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: Error creating user
+        "500":
+          description: Internal Server Error
+  /users/login:
+    post:
+      tags: 
+        - Users
+      summary: user login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: neq_hbo
+                email:
+                  type: string
+                  example: neqhbo@gmail.com
+                pass:
+                  type: string
+                  example: 123holaneq
+              required:
+                - pass
+      responses:
+        "200":
+          description: User successfully logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: User successfully logged in
+        "401":
+          description: Incorrect username / email or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: Incorrect username / email or password
+        "500":
+          description: Internal Server Error
+  /users/{user_id}:
+    parameters: 
+    - in: path  
+      name: user_id
+      description: User ID to manupillate
+      required: true
+      schema:
+        type: integer
+        example: 1345
+    get:
+      tags: 
+        - Users
+      security: 
+        - bearerAuth: 
+          - read
+      summary: List a user
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    example: neq_hbo
+                  fullname:
+                    type: string
+                    example: Hector bedoya
+                  email:
+                    type: string
+                    example: neqhbo@gmail.com
+                  phone:
+                    type: integer
+                    example: 3167895677
+                  address:
+                    type: string
+                    example: Av. caracas 155
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+  /products:
+    post:
+      tags: 
+        - Products
+      security: 
+        - bearerAuth: 
+          - read
+      summary: Add a new product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Burger
+                price:
+                  type: number
+                  example: 456.30
+                img_url:
+                  type: string
+                  example: "https://saboryestilo.com.mx/wp-content/uploads/2019/07/como-preparar-carne-para-hamburguesa-1-800x400.jpg"
+              required:
+                - name
+                - price
+                - img_url
+      responses:
+        "200":
+          description: Successfully created product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: Successfully created product
+                  product_id:
+                    type: integer
+                    example: 12345
+        "401":
+          description: Incomplete data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: Incomplete data
+        "500":
+          description: Internal Server Error
+    get:
+      tags: 
+        - Products
+      security: 
+        - bearerAuth: 
+          - read
+      summary: List all products
+      responses:
+        "200":
+          description: Successfully imported product
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    product_id:
+                      type: integer
+                      example: 12345
+                    name:
+                      type: string
+                      example: Burger
+                    price:
+                      type: number
+                      example: 456.30
+                    img_url:
+                      type: string
+                      example: "https://saboryestilo.com.mx/wp-content/uploads/2019/07/como-preparar-carne-para-hamburguesa-1-800x400.jpg"
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+  /products/{product_id}:
+    parameters: 
+    - in: path  
+      name: product_id
+      description: ID of the product to be handled
+      required: true
+      schema:
+        type: integer
+        example: 12345
+    patch:
+      tags: 
+        - Products
+      security: 
+        - bearerAuth: 
+          - read
+      description: Modify a product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Burguer
+                price:
+                  type: number
+                  example: 456.30
+                img_url:
+                  type: string
+                  example: "https://saboryestilo.com.mx/wp-content/uploads/2019/07/como-preparar-carne-para-hamburguesa-1-800x400.jpg"
+      responses:
+        "200":
+          description: Successfully modified product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: Successfully modified product
+        "400":
+          description: Bad request
+        "500":
+          description: Internal Server Error
+    delete:
+      tags: 
+        - Products
+      security: 
+        - bearerAuth: 
+          - read
+      description: Deactivated a product
+      responses:
+        "200":
+          description: Product deactivated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: Product deactivated successfully
+        "400":
+          description: Bad request
+        "500":
+          description: Internal Server Error
+  /orders:
+    post:
+      tags: 
+        - Orders
+      security: 
+        - bearerAuth: 
+          - read
+      summary: Add a new order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: number
+                  example: 456.30
+                pay_method_id:
+                  type: string
+                  example: cash
+                detail:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: integer
+                        example: 120
+                      quantity:
+                        type: integer
+                        example: 3
+              required:
+                - total
+                - payment_method
+                - product_id
+                - quantity
+      responses:
+        "200":
+          description: Order successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: Order successfully created
+                  order_id:
+                    type: integer
+                    example: 12345
+        "401":
+          description: Incomplete mandatory data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: Incomplete mandatory data
+        "500":
+          description: Internal Server Error
+  /orders/{order_id}:
+    parameters: 
+    - in: path  
+      name: order_id
+      description: ID of the order to be manupillated
+      required: true
+      schema:
+        type: integer
+        example: 175
+    get:
+      tags: 
+        - Orders
+      security: 
+        - bearerAuth: 
+          - read
+      summary: List an order
+      responses:
+        "200":
+          description: Detail of an order
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    total:
+                      type: number
+                      example: 456.30
+                    status_id:
+                      type: integer
+                      example: 123
+                    user_id:
+                      type: integer
+                      example: 123
+                    detalle:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          product_id:
+                            type: integer
+                            example: 120
+                          quantity:
+                            type: integer
+                            example: 3
+                    pay_method_id:
+                      type: integer
+                      example: 123
+                    order_id:
+                      type: integer
+                      example: 170
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+    patch:
+      tags: 
+        - Orders
+      security: 
+        - bearerAuth: 
+          - read
+      description: Modify an order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status_id:
+                  type: integer
+                  example: 123
+      responses:
+        "200":
+          description: Successfully modified order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: Successfully modified order
+        "400":
+          description: Bad request
+        "500":
+          description: Internal Server Error
+    delete:
+      tags: 
+        - Orders
+      security: 
+        - bearerAuth: 
+          - read
+      description: Cancel an order
+      responses:
+        "200":
+          description: Order successfully canceled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msj:
+                    type: string
+                    example: Order successfully canceled
+        "400":
+          description: Bad request
+        "500":
+          description: Internal Server Error
+components:
+  securitySchemes:
+    bearerAuth:            
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/pilar-garcia/1.0.0/1.0.0
