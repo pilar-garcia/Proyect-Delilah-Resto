@@ -192,13 +192,13 @@ paths:
                 price:
                   type: number
                   example: 456.30
-                img_url:
+                imgUrl:
                   type: string
                   example: "https://saboryestilo.com.mx/wp-content/uploads/2019/07/como-preparar-carne-para-hamburguesa-1-800x400.jpg"
               required:
                 - name
                 - price
-                - img_url
+                - imgUrl
       responses:
         "200":
           description: Successfully created product
@@ -210,7 +210,7 @@ paths:
                   msj:
                     type: string
                     example: Successfully created product
-                  product_id:
+                  productId:
                     type: integer
                     example: 12345
         "401":
@@ -242,7 +242,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    product_id:
+                    productId:
                       type: integer
                       example: 12345
                     name:
@@ -251,7 +251,7 @@ paths:
                     price:
                       type: number
                       example: 456.30
-                    img_url:
+                    imgUrl:
                       type: string
                       example: "https://saboryestilo.com.mx/wp-content/uploads/2019/07/como-preparar-carne-para-hamburguesa-1-800x400.jpg"
         "400":
@@ -261,7 +261,7 @@ paths:
   /products/{product_id}:
     parameters: 
     - in: path  
-      name: product_id
+      name: productId
       description: ID of the product to be handled
       required: true
       schema:
@@ -286,7 +286,7 @@ paths:
                 price:
                   type: number
                   example: 456.30
-                img_url:
+                imgUrl:
                   type: string
                   example: "https://saboryestilo.com.mx/wp-content/uploads/2019/07/como-preparar-carne-para-hamburguesa-1-800x400.jpg"
       responses:
@@ -316,6 +316,7 @@ paths:
           description: Product deactivated successfully
           content:
             application/json:
+              
               schema:
                 type: object
                 properties:
@@ -343,7 +344,7 @@ paths:
                 total:
                   type: number
                   example: 456.30
-                pay_method_id:
+                payMethodId:
                   type: string
                   example: cash
                 detail:
@@ -351,7 +352,7 @@ paths:
                   items:
                     type: object
                     properties:
-                      product_id:
+                      productId:
                         type: integer
                         example: 120
                       quantity:
@@ -359,8 +360,8 @@ paths:
                         example: 3
               required:
                 - total
-                - payment_method
-                - product_id
+                - paymentMethod
+                - productId
                 - quantity
       responses:
         "200":
