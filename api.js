@@ -11,7 +11,7 @@ const {
     validacionJWTAdmin,
   } = require("./middlewares");
   const { createUser, login, getUser } = require("./userController");
-  const { createProduct, getProduct, updateProduct, deleteProduct } = require("./productController");
+  const { createProduct, getProduct, getProducts, updateProduct, deleteProduct } = require("./productController");
   const { createOrder, getOrder, updateOrder, deleteOrder } = require("./orderController");
   
   app.use(express.json());
@@ -29,12 +29,13 @@ app.get("/usuarios/:user_id", validacionJWT, getUser); // LISTAR DATOS DE UN USU
 
 // PRODUCTS
 app.post("/products", validateProductData, validacionJWTAdmin, createProduct); // CREATE PRODUCTS
-app.get("/products", validacionJWT, getProduct); // GET ALL PRODUCTS
-app.patch("/products/:product_id", validacionJWTAdmin, updateProduct); // UPDATE PRODUCT
-app.delete("/products/:product_id", validacionJWTAdmin, deleteProduct); // DELETE PRODUCT
+app.get("/products", validacionJWT, getProducts); // GET ALL PRODUCTS
+app.get("/products/:productId", validacionJWT, getProduct); // FIND PRODUCT BY ID
+app.patch("/products/:productId", validacionJWTAdmin, updateProduct); // UPDATE PRODUCT
+app.delete("/products/:productId", validacionJWTAdmin, deleteProduct); // DELETE PRODUCT
 
 // ORDERS
 app.post("/orders", validateOrderData, validacionJWT, createOrder); // CREATE ORDER
-app.get("/orders/:order_id", validacionJWT, getOrder); // GET ORDER
-app.patch("/orders/:order_id", validacionJWTAdmin, updateOrder); // UPDATE ORDER
-app.delete("/orders/:order_id", validacionJWTAdmin, deleteOrder); // DELETE ORDER
+app.get("/orders/:orderId", validacionJWT, getOrder); // GET ORDER
+app.patch("/orders/:orderId", validacionJWTAdmin, updateOrder); // UPDATE ORDER
+app.delete("/orders/:orderId", validacionJWTAdmin, deleteOrder); // DELETE ORDER

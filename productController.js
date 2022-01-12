@@ -21,10 +21,23 @@ module.exports = {
         try {
             let productId = req.params.productId;
             
-            sequelize.models.Product.findByPk(productId).then((product) => {
+            sequelize.models.Product.findOne({ where: { id: productId, status: 'ACTIVE' } }).then((product) => {
               res.status(200).json(product);
             }).catch((error)=>{
               res.status(400).json(error);
+            });
+              
+          } catch (error) {
+              res.status(400).json(error);
+              console.error('Unable to connect to the database:', error);
+          }
+    },
+    getProducts: (req, res) => {
+        try {
+            sequelize.models.Product.findAll({ where: { status: 'ACTIVE' } }).then((product) => {
+                res.status(200).json(product);
+            }).catch((error)=>{
+                res.status(400).json(error);
             });
               
           } catch (error) {
@@ -37,7 +50,7 @@ module.exports = {
             let productId = req.params.productId;
             let productToUpdate = req.body;
             
-            sequelize.models.Order.findByPk(productId).then((product) => {
+            sequelize.models.Product.findByPk(productId).then((product) => {
                 product.name = productToUpdate.name;
                 product.price = productToUpdate.price;
                 product.imgUrl = productToUpdate.imgUrl;
@@ -50,7 +63,10 @@ module.exports = {
                 }).catch((error)=>{
                     res.status(400).json(error);
                     console.error('Unable to connect to the database:', error);
-                })
+                });
+            }).catch((error)=>{
+                res.status(400).json(error);
+                console.error('Unable to connect to the database:', error);
             });
               
           } catch (error) {
@@ -64,14 +80,17 @@ module.exports = {
            
             sequelize.models.Product.findByPk(productId).then((product) => {
               
-              // delete la orden
-              product.destroy().then((productDeleted) => {
-                
-                res.status(200).json(productDeleted);
+                // delete la orden
+                product.status = 'INACTIVE';
+                product.save().then((productDeleted) => {
+                    res.status(200).json(productDeleted);
                 }).catch((error)=>{
                     res.status(400).json(error);
                     console.error('Unable to connect to the database:', error);
                 })
+            }).catch((error)=>{
+                res.status(400).json(error);
+                console.error('Unable to connect to the database:', error);
             });
               
           } catch (error) {

@@ -85,6 +85,11 @@ Product.init({
      type: DataTypes.STRING,
      allowNull: false   
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'ACTIVE'   
+ },
 }, {
   // Other model options go here
   sequelize, // We need to pass the connection instance
@@ -178,6 +183,21 @@ Rol.sync().then(result=>{
 }).catch((error)=>{
   console.error('Error', error);
 });
-User.sync();
+User.sync().then(result=>{
+  User.findOrCreate({
+    where: { userName: 'ADMIN' },
+    defaults: {
+      userName: 'admin',
+      fullName: 'administrator',
+      email: 'admin@admin.co',
+      phone: '0000000',
+      address: 'Dalilah resto',
+      pass: 'admin',
+      rolId: '1'
+    }
+  });
+}).catch((error)=>{
+  console.error('Error', error);
+});;
 
 module.exports = sequelize;
