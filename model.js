@@ -153,8 +153,16 @@ Order.init({
   modelName: 'Order' // We need to choose the model name
 });
 
-Order.belongsToMany(Product, { as: 'Details', through: Item })
-Product.belongsToMany(Order, { as: 'Details', through: Item })
+Item.belongsTo(Order, {
+  foreignKey: 'orderId'
+});
+Item.belongsTo(Product, {
+  foreignKey: 'productId'
+});
+Order.hasMany(Item, {
+  foreignKey: 'orderId'
+});
+
 User.belongsTo(Rol, {
   foreignKey: 'rolId'
 });
@@ -180,9 +188,13 @@ PaymentMethod.sync().then(result=>{
   });
 }).catch((error)=>{
   console.error('Error', error);
-});;
-Order.sync();
-Item.sync();
+});
+Order.sync().catch((error)=>{
+  console.error('Error', error);
+});
+Item.sync().catch((error)=>{
+  console.error('Error', error);
+});
 Rol.sync().then(result=>{
   Rol.findOrCreate({
     where: { name: 'ADMIN' },
@@ -214,6 +226,6 @@ User.sync().then(result=>{
   });
 }).catch((error)=>{
   console.error('Error', error);
-});;
+});
 
 module.exports = sequelize;

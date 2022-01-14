@@ -12,7 +12,7 @@ const {
   } = require("./middlewares");
   const { createUser, login, getUser } = require("./userController");
   const { createProduct, getProduct, getProducts, updateProduct, deleteProduct } = require("./productController");
-  const { createOrder, getOrder, updateOrder, deleteOrder } = require("./orderController");
+  const { createOrder, getOrder, updateOrder } = require("./orderController");
   
   app.use(express.json());
   
@@ -38,4 +38,3 @@ app.delete("/products/:productId", validacionJWTAdmin, deleteProduct); // DELETE
 app.post("/orders", validateOrderData, validacionJWT, createOrder); // CREATE ORDER
 app.get("/orders/:orderId", validacionJWT, getOrder); // GET ORDER
 app.patch("/orders/:orderId", validacionJWTAdmin, updateOrder); // UPDATE ORDER
-app.delete("/orders/:orderId", validacionJWTAdmin, deleteOrder); // DELETE ORDER
