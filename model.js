@@ -153,7 +153,8 @@ Order.init({
   modelName: 'Order' // We need to choose the model name
 });
 
-Product.belongsToMany(Order, { through: Item })
+Order.belongsToMany(Product, { as: 'Details', through: Item })
+Product.belongsToMany(Order, { as: 'Details', through: Item })
 User.belongsTo(Rol, {
   foreignKey: 'rolId'
 });
@@ -164,7 +165,22 @@ Order.belongsTo(User, {
   foreignKey: 'clientId'
 });
 Product.sync();
-PaymentMethod.sync();
+PaymentMethod.sync().then(result=>{
+  PaymentMethod.findOrCreate({
+    where: { name: 'DEBIT CARD' },
+    defaults: {
+      name: 'DEBIT CARD'
+    }
+  });
+  PaymentMethod.findOrCreate({
+    where: { name: 'CREDIT CARD' },
+    defaults: {
+      name: 'CREDIT CARD'
+    }
+  });
+}).catch((error)=>{
+  console.error('Error', error);
+});;
 Order.sync();
 Item.sync();
 Rol.sync().then(result=>{

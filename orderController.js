@@ -1,5 +1,6 @@
 const sequelize = require('./model')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { getProducts } = require('./productController');
 
 
 const sumTotalItems = (previousItem, currentItem) => previousItem.total + currentItem.total;
@@ -9,21 +10,24 @@ module.exports = {
        try {
             let orderToSave = req.body;
             //Find pay method of order to save by primary key
-            sequelize.models.PaymentMethod.findByPk(orderToSave.payMethodId).then((paymentMethod)=>{
+            sequelize.models.PaymentMethod.findByPk(orderToSave.paymentMethodId).then((paymentMethod)=>{
                 const order =  sequelize.models.Order.build({ total: orderToSave.total, paymentMethodId: paymentMethod.id });
                     order.save().then((orderSaved) => {
-                        let itemsToSave = orderToSave.detail;
+                        let itemsToSave = orderToSave.items;
                         let promisesItem = [];
                         //product plus others product  result the sum of amounts by price and total
                         itemsToSave.forEach(itemToSave => {
                             let promiseItem = new Promise((resolve, reject) => {
                                 sequelize.models.Product.findByPk(itemToSave.productId).then((product)=>{
-                                    order.addProduct(product, { through: { amount: itemToSave.amount } }).then(orderWithProduct =>{
+                                    order.addDetail(product, { through: { amount: itemToSave.amount } }).then(orderWithProduct =>{
                                         let total = itemToSave.amount*product.price;
                                         resolve({id: product.id,total: total});
+                                    }).catch((error)=>{
+                                        console.error('error adding product to order', error);
+                                        reject(error);
                                     });
                                 }).catch((error)=>{
-                                    console.error('Unable to connect to the database:', error);
+                                    console.error('Error finding order:', error);
                                     reject(error);
                                 });
                             });
@@ -36,23 +40,37 @@ module.exports = {
                                 total: total
                             });
                             orderSaved.save().then(orderWithTotal=>{
-                                res.status(200).json(orderWithTotal);
+                                sequelize.models.Order.findOne({
+                                    where: {
+                                      id: orderWithTotal.id
+                                    },
+                                    include: 'Details'
+                                    //include: [ { model: sequelize.models.Item, as: 'Detail' } ]
+                                  }).then(findalOrder=>{
+                                    res.status(200).json(findalOrder);
+                                  }).catch((error)=>{
+                                    console.error('Error getting final order:', error);
+                                    res.status(400).json(error);
+                                });
+                            }).catch((error)=>{
+                                console.error('Error saving order with total:', error);
+                                res.status(400).json(error);
                             });
                         }).catch((error)=>{
-                            res.status(400).json(error);
                             console.error('Unable to connect to the database:', error);
+                            res.status(400).json(error);
                         });
                     }).catch((error)=>{
-                        res.status(400).json(error);
                         console.error('Unable to connect to the database:', error);
+                        res.status(400).json(error);
                     })
             }).catch((error)=>{
+                console.error('Error finding paymentMethod:', error);
                 res.status(400).json(error);
-                console.error('Unable to connect to the database:', error);
             });
         }catch (error) {
-            res.status(400).json(error);
             console.error('Unable to connect to the database:', error);
+            res.status(400).json(error);
         }
     },
     getOrder: (req, res) => {
@@ -64,8 +82,8 @@ module.exports = {
             res.status(400).json(error);
           });
         } catch (error) {
-            res.status(400).json(error);
             console.error('Unable to connect to the database:', error);
+            res.status(400).json(error);
         }
     },
     updateOrder: (req, res) => {
@@ -84,14 +102,14 @@ module.exports = {
                 //product plus others product  result the sum of amounts by price and total
                     res.status(200).json(orderUpdated);
                 }).catch((error)=>{
-                    res.status(400).json(error);
                     console.error('Unable to connect to the database:', error);
+                    res.status(400).json(error);
                 })
             });
               
           } catch (error) {
-              res.status(400).json(error);
               console.error('Unable to connect to the database:', error);
+              res.status(400).json(error);
           }
     },
     deleteOrder: (req, res) => {
@@ -106,14 +124,14 @@ module.exports = {
                 
                 res.status(200).json(orderDeleted);
                 }).catch((error)=>{
-                    res.status(400).json(error);
                     console.error('Unable to connect to the database:', error);
+                    res.status(400).json(error);
                 })
             });
               
           } catch (error) {
-              res.status(400).json(error);
               console.error('Unable to connect to the database:', error);
+              res.status(400).json(error);
           }
     },
   };
