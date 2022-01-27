@@ -25,7 +25,7 @@ const {
 // USERS
 app.post("/users", validateUserData, createUser); // CREATE USER
 app.post("/users/login", login); // LOGIN USER
-app.get("/usuarios/:user_id", validacionJWT, getUser); // LISTAR DATOS DE UN USUARIO ESPECIFICO
+app.get("/usuarios/:userId", validacionJWT, getUser); // LISTAR DATOS DE UN USUARIO ESPECIFICO
 
 // PRODUCTS
 app.post("/products", validateProductData, validacionJWTAdmin, createProduct); // CREATE PRODUCTS

@@ -78,11 +78,17 @@ module.exports = {
     getOrder: (req, res) => {
         try {
           let orderId = req.params.orderId;
-          sequelize.models.Order.findByPk(orderId).then((order) => {
-            res.status(200).json(order);
+          sequelize.models.Order.findOne({
+            where: {
+              id: orderId
+            },
+            include: [ { model: sequelize.models.Item, as: 'Items' } ]
+          }).then(findalOrder=>{
+            res.status(200).json(findalOrder);
           }).catch((error)=>{
+            console.error('Error getting final order:', error);
             res.status(400).json(error);
-          });
+        });
         } catch (error) {
             console.error('Unable to connect to the database:', error);
             res.status(400).json(error);

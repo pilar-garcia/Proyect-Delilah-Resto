@@ -61,7 +61,7 @@ module.exports = {
     },
     getUser: (req, res) => {
       try {
-        let userId = req.params.user_id;
+        let userId = req.params.userId;
         console.log(userId);
         sequelize.models.User.findByPk(userId).then((user) => {
           
