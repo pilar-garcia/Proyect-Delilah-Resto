@@ -20,7 +20,8 @@ module.exports = {
                         itemsToSave.forEach(itemToSave => {
                             let promiseItem = new Promise((resolve, reject) => {
                                 sequelize.models.Product.findByPk(itemToSave.productId).then((product)=>{
-                                    const itemToAdd =  sequelize.models.Item.build({ amount: itemToSave.amount, productId: product.id, orderId: order.id });
+                                    const totalItem = product.price * itemToSave.amount;
+                                    const itemToAdd =  sequelize.models.Item.build({ amount: itemToSave.amount, total: totalItem, productId: product.id, orderId: order.id });
                                     itemToAdd.save().then(savedItem =>{
                                         console.log(savedItem);
                                         let total = itemToSave.amount*product.price;
@@ -122,6 +123,7 @@ module.exports = {
                                         console.log(item,item[0]);
                                         let foundItem = item[0];
                                         foundItem.amount = itemToSave.amount;
+                                        foundItem.price = product.price * itemToSave.amount;
                                         foundItem.save().then(updatedItem=>{
                                             let total = itemToSave.amount*product.price;
                                             resolve(total);

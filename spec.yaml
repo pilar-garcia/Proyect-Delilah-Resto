@@ -16,7 +16,7 @@ paths:
     post:
       tags: 
         - Users
-      summary: User add
+      summary: Register a new User with Client Rol
       requestBody:
         content:
           application/json:
@@ -88,7 +88,7 @@ paths:
     post:
       tags: 
         - Users
-      summary: user login
+      summary: Given username and password authenticate an User
       requestBody:
         content:
           application/json:
@@ -98,9 +98,6 @@ paths:
                 username:
                   type: string
                   example: neq_hbo
-                email:
-                  type: string
-                  example: neqhbo@gmail.com
                 pass:
                   type: string
                   example: 123holaneq
@@ -129,11 +126,11 @@ paths:
                     example: Incorrect username / email or password
         "500":
           description: Internal Server Error
-  /users/{user_id}:
+  /users/{userId}:
     parameters: 
     - in: path  
-      name: user_id
-      description: User ID to manupillate
+      name: userId
+      description: User ID to manipulate
       required: true
       schema:
         type: integer
@@ -147,7 +144,7 @@ paths:
       summary: List a user
       responses:
         "200":
-          description: List of users
+          description: Information about User
           content:
             application/json:
               schema:
@@ -258,7 +255,7 @@ paths:
           description: Bad Request
         "500":
           description: Internal Server Error
-  /products/{product_id}:
+  /products/{productId}:
     parameters: 
     - in: path  
       name: productId
@@ -273,7 +270,7 @@ paths:
       security: 
         - bearerAuth: 
           - read
-      description: Modify a product
+      description: Modify product details
       requestBody:
         content:
           application/json:
@@ -344,10 +341,10 @@ paths:
                 total:
                   type: number
                   example: 456.30
-                payMethodId:
+                paymentMethodId:
                   type: string
                   example: cash
-                detail:
+                items:
                   type: array
                   items:
                     type: object
@@ -355,9 +352,12 @@ paths:
                       productId:
                         type: integer
                         example: 120
-                      quantity:
+                      amount:
                         type: integer
                         example: 3
+                      total:
+                        type: number
+                        example: 200
               required:
                 - total
                 - paymentMethod
@@ -371,12 +371,47 @@ paths:
               schema:
                 type: object
                 properties:
-                  msj:
+                  total:
+                    type: number
+                    example: 456.30
+                  paymentMethodId:
                     type: string
-                    example: Order successfully created
-                  order_id:
+                    example: cash
+                  createdAt:
+                    type: string
+                    example: "2022-01-14T23:14:48.000Z"
+                  updatedAt:
+                    type: string
+                    example: "2022-01-14T23:14:48.000Z"
+                  clientd: 
                     type: integer
-                    example: 12345
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        orderId: 
+                          type: integer
+                          example: 1
+                        productId:
+                          type: integer
+                          example: 120
+                        createdAt: 
+                          type: string
+                          example: "2022-01-14T23:14:48.000Z"
+                        updatedAt: 
+                          type: string
+                          example: "2022-01-14T23:14:48.000Z"
+                        amount:
+                          type: integer
+                          example: 3
+                        total:
+                          type: number
+                          example: 200
         "401":
           description: Incomplete mandatory data
           content:
@@ -389,11 +424,11 @@ paths:
                     example: Incomplete mandatory data
         "500":
           description: Internal Server Error
-  /orders/{order_id}:
+  /orders/{orderId}:
     parameters: 
     - in: path  
-      name: order_id
-      description: ID of the order to be manupillated
+      name: orderId
+      description: ID of the order to be manipulated
       required: true
       schema:
         type: integer
@@ -411,36 +446,49 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    total:
-                      type: number
-                      example: 456.30
-                    status_id:
-                      type: integer
-                      example: 123
-                    user_id:
-                      type: integer
-                      example: 123
-                    detalle:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          product_id:
-                            type: integer
-                            example: 120
-                          quantity:
-                            type: integer
-                            example: 3
-                    pay_method_id:
-                      type: integer
-                      example: 123
-                    order_id:
-                      type: integer
-                      example: 170
+                type: object
+                properties:
+                  total:
+                    type: number
+                    example: 456.30
+                  paymentMethodId:
+                    type: string
+                    example: cash
+                  createdAt:
+                    type: string
+                    example: "2022-01-14T23:14:48.000Z"
+                  updatedAt:
+                    type: string
+                    example: "2022-01-14T23:14:48.000Z"
+                  clientd: 
+                    type: integer
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        orderId: 
+                          type: integer
+                          example: 1
+                        productId:
+                          type: integer
+                          example: 120
+                        createdAt: 
+                          type: string
+                          example: "2022-01-14T23:14:48.000Z"
+                        updatedAt: 
+                          type: string
+                          example: "2022-01-14T23:14:48.000Z"
+                        amount:
+                          type: integer
+                          example: 3
+                        total:
+                          type: number
+                          example: 200
         "400":
           description: Bad Request
         "500":
@@ -456,11 +504,28 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                status_id:
-                  type: integer
-                  example: 123
+                type: object
+                properties:
+                  total:
+                    type: number
+                    example: 456.30
+                  paymentMethodId:
+                    type: string
+                    example: cash
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        productId:
+                          type: integer
+                          example: 120
+                        amount:
+                          type: integer
+                          example: 3
+                        total:
+                          type: number
+                          example: 200
       responses:
         "200":
           description: Successfully modified order
@@ -469,9 +534,47 @@ paths:
               schema:
                 type: object
                 properties:
-                  msj:
+                  total:
+                    type: number
+                    example: 456.30
+                  paymentMethodId:
                     type: string
-                    example: Successfully modified order
+                    example: cash
+                  createdAt:
+                    type: string
+                    example: "2022-01-14T23:14:48.000Z"
+                  updatedAt:
+                    type: string
+                    example: "2022-01-14T23:14:48.000Z"
+                  clientd: 
+                    type: integer
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        orderId: 
+                          type: integer
+                          example: 1
+                        productId:
+                          type: integer
+                          example: 120
+                        createdAt: 
+                          type: string
+                          example: "2022-01-14T23:14:48.000Z"
+                        updatedAt: 
+                          type: string
+                          example: "2022-01-14T23:14:48.000Z"
+                        amount:
+                          type: integer
+                          example: 3
+                        total:
+                          type: number
+                          example: 200
         "400":
           description: Bad request
         "500":
@@ -491,9 +594,47 @@ paths:
               schema:
                 type: object
                 properties:
-                  msj:
+                  total:
+                    type: number
+                    example: 456.30
+                  paymentMethodId:
                     type: string
-                    example: Order successfully canceled
+                    example: cash
+                  createdAt:
+                    type: string
+                    example: "2022-01-14T23:14:48.000Z"
+                  updatedAt:
+                    type: string
+                    example: "2022-01-14T23:14:48.000Z"
+                  clientd: 
+                    type: integer
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        orderId: 
+                          type: integer
+                          example: 1
+                        productId:
+                          type: integer
+                          example: 120
+                        createdAt: 
+                          type: string
+                          example: "2022-01-14T23:14:48.000Z"
+                        updatedAt: 
+                          type: string
+                          example: "2022-01-14T23:14:48.000Z"
+                        amount:
+                          type: integer
+                          example: 3
+                        total:
+                          type: number
+                          example: 200
         "400":
           description: Bad request
         "500":
