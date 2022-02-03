@@ -53,6 +53,9 @@ npm start
 
 Puedes ir a swagger copiar y pegar el contenido del archivo YAML para entender mejor el funcionamiento de la API
 
+Adiconalmente puedes agregar la siguiente coleccion de postman para visualizar el uso adecuado de cada Enpoint:
+https://www.getpostman.com/collections/d37fd5daeeb8a02312bd 
+
 # ENDPOINTS:
 
 | Metodo  | Endpoint               | Header  | Descripcion                        |
