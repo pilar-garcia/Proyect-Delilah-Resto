@@ -5,21 +5,21 @@ Crear el backend para un sistema de pedidos online para un restaurante.
 
 # Acciones User:
 
-Registrarnos
-Identificarnos
-Crear Órdenes
+- Registrarnos
+- Identificarnos
+- Crear Órdenes
 
 # Acciones Admin:
 
-Obtener Productos
-Agregar Productos
-Eliminar Productos
-Actualizar Productos
-Obtener todas las Órdenes
-Eliminar Órdenes
-Actualizar status de las Órdenes
-Crear Órdenes
-Obtener  Usuarios
+- Obtener Productos
+- Agregar Productos
+- Eliminar Productos
+- Actualizar Productos
+- Obtener todas las Órdenes
+- Eliminar Órdenes
+- Actualizar status de las Órdenes
+- Crear Órdenes
+- Obtener  Usuarios
 # Clonar el proyecto desde tu consola:
 copia y pega esta línea de comando:
 
