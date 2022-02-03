@@ -54,6 +54,10 @@ npm start
 Puedes ir a swagger copiar y pegar el contenido del archivo YAML para entender mejor el funcionamiento de la API
 
 Adiconalmente puedes agregar la siguiente coleccion de postman para visualizar el uso adecuado de cada Enpoint:
+Para agregar la colecion, debes:
+1. ir a la aplicacion de Postman y dar click en File(Archivo).
+2. dar click en import(importar) y seleccionar la tercera pestaña(link).
+3. copiar y pegar el link acontinuación y dar click en continue(continuar).
 https://www.getpostman.com/collections/d37fd5daeeb8a02312bd 
 
 # ENDPOINTS:
