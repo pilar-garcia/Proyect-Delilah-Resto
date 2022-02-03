@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
-const sequelize = new Sequelize('mysql://admin:dalilah@localhost:3306/dalilah')
+const sequelize = new Sequelize('mysql://admin:delilah@localhost:3306/delilah')
 
 class User extends Model {}
 
@@ -223,7 +223,7 @@ User.sync().then(result=>{
       fullName: 'administrator',
       email: 'admin@admin.co',
       phone: '0000000',
-      address: 'Dalilah resto',
+      address: 'Delilah resto',
       pass: 'admin',
       rolId: '1'
     }
